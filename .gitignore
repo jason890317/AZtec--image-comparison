@@ -1,2 +1,4 @@
 test*
 .history
+overlapped/*
+unit_spheres/*

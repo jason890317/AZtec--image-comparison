@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import logging
 from scheme.hue import LOWER_GREEN, UPPER_GREEN
+import os
 
 class Sphere:
 
@@ -78,7 +79,10 @@ class Sphere:
         composite = cv2.addWeighted(composite, 0.7, overlap_vis, 1.0, 0)
         
         # Save the composite visualization
-        cv2.imwrite(f"overlapped/{self.name}_{other_sphere.name}_overlapped.png", composite)
+        region=os.getenv("REGION")
+        saved_dir = os.path.join("overlapped",region)
+        os.makedirs(saved_dir, exist_ok=True)
+        cv2.imwrite(f"{saved_dir}/{self.name[:-4]}_{other_sphere.name[:-4]}_overlapped.png", composite)
 
     def compare_spheres(self, other_sphere):
         # Compare the masks

@@ -158,7 +158,8 @@ class Image:
             sphere_image = self.image[y_start:y_end, x_start:x_end]
             
             # Create Sphere object
-            sphere_obj = sphere.Sphere(sphere_image, f"{os.path.basename(self.image_path)[:-4]}_sphere_{i}.png", (cx, cy), diameters[i])
+            sphere_name = f"{os.path.basename(self.image_path).split(' ')[-1][:-4]}_{i}.png"
+            sphere_obj = sphere.Sphere(sphere_image, sphere_name, (cx, cy), diameters[i])
             spheres.append(sphere_obj)
             
             # Create directory for saving sphere images if it doesn't exist

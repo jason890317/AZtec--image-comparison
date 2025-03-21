@@ -11,7 +11,7 @@ if __name__ == "__main__":
     load_dotenv()
     main_image_path=os.getenv("MAIN_FILE")
     compared_image_paths=str(os.getenv("COMPARED_FILE")).split(",")
-
+    
     # Load main image
     main_image = image.Image(main_image_path)
     logging.info(f"Loading Main Image: {main_image_path}")
