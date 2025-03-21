@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
 from scheme.hue import LOWER_BLUE, UPPER_BLUE
-from scheme.image import DEBUG_PATH
+from scheme.image import DEBUG_PATH, SPHERE_DIAMETER
 from utils import sphere
+import logging
+import os
 
 
 class Image:
@@ -21,6 +23,8 @@ class Image:
         self.total_count = 0
         self.centers = []
         self.spheres = []
+        self.count_blue_sphere()
+        self.extract_spheres_by_centers(SPHERE_DIAMETER)
 
     def count_blue_sphere(self, debug=False):
         """
@@ -67,6 +71,8 @@ class Image:
             return 0, 0, 0
         
         # Sort centers by y-coordinate (row)
+        sorted_centers = sorted(centers.copy(), key=lambda item: (item[0], item[1]))
+
         centers.sort(key=lambda p: p[1])
         
         # Determine rows by clustering y-coordinates
@@ -118,11 +124,7 @@ class Image:
         self.rows = rows
         self.cols = cols
         self.total_count = total_count
-        self.centers = centers
-
-
-
-
+        self.centers = sorted_centers
 
 
     # Extract spheres using vectorized operations where possible
@@ -144,9 +146,9 @@ class Image:
         else:
             diameters = diameter
             
-        for (cx, cy), d in zip(self.centers, diameters):
+        for i, (cx, cy) in enumerate(self.centers):
             # Calculate the bounding box
-            radius = d // 2
+            radius = diameters[i] // 2
             x_start = max(0, cx - radius)
             y_start = max(0, cy - radius)
             x_end = min(self.image.shape[1], cx + radius)
@@ -156,10 +158,21 @@ class Image:
             sphere_image = self.image[y_start:y_end, x_start:x_end]
             
             # Create Sphere object
-            sphere_obj = sphere.Sphere(sphere_image, (cx, cy), d)
-            # Store diameter
+            sphere_obj = sphere.Sphere(sphere_image, f"{os.path.basename(self.image_path)[:-4]}_sphere_{i}.png", (cx, cy), diameters[i])
             spheres.append(sphere_obj)
-            cv2.imwrite(f"debug_image/sphere_{cx}_{cy}.png", sphere_image)
+            
+            # Create directory for saving sphere images if it doesn't exist
+            save_dir = os.path.join("unit_spheres", os.path.basename(self.image_path)[:-4])
+            os.makedirs(save_dir, exist_ok=True)
+            
+            # Save sphere image
+            save_path = os.path.join(save_dir, sphere_obj.name)
+            cv2.imwrite(save_path, sphere_image)
         self.spheres = spheres
         return spheres
- 
+    
+    def compare(self, other_image):
+        for sphere in self.spheres:
+            for other_sphere in other_image.spheres:
+                sphere.compare_spheres(other_sphere)
+

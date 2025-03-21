@@ -1,12 +1,30 @@
 from utils import image
-from scheme.image import SPHERE_DIAMETER
+import os 
+import logging
+from dotenv import load_dotenv
+
+logging.basicConfig(level=logging.INFO)
+
 if __name__ == "__main__":
+
+    # Load environment variables
+    load_dotenv()
+    main_image_path=os.getenv("MAIN_FILE")
+    compared_image_paths=str(os.getenv("COMPARED_FILE")).split(",")
+
+    # Load main image
+    main_image = image.Image(main_image_path)
+    logging.info(f"Loading Main Image: {main_image_path}")
+
+    # Load compared images
+    compared_images = []
+    for compared_image_path in compared_image_paths:
+        logging.info(f"Loading compared image: {compared_image_path}")
+        compared_image = image.Image(compared_image_path)
+        compared_images.append(compared_image)
     
-    # Count blue balls in the FCC pole figure
-    image_path = "asset/region2/region2_pole figure FCC.bmp"
-    image_a = image.Image(image_path)
-    image_a.count_blue_sphere(debug=True)
-    image_a.extract_spheres_by_centers(SPHERE_DIAMETER)
-    print(f"Blue balls in the image: {image_a.total_count}")
-    print(f"Arranged in {image_a.rows} rows and {image_a.cols} columns")
-    
+    # Compare images
+    for compared_image in compared_images:
+        logging.info(f"Comparing {compared_image_path} with {main_image_path}")
+        main_image.compare(compared_image)
+
