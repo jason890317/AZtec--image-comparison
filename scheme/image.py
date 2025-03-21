@@ -14,3 +14,5 @@ GRID_CONFIG = {
     'cols': 4,           # Number of columns in the grid
     'rows': 2            # Number of rows in the grid
 }
+
+DEBUG_PATH = "debug_image/blue_balls_debug.png"
