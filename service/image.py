@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from scheme.hue import LOWER_BLUE, UPPER_BLUE
 from scheme.image import DEBUG_PATH, SPHERE_DIAMETER
-from utils import sphere
+from service.sphere import Sphere
 import logging
 import os
 
@@ -159,7 +159,7 @@ class Image:
             
             # Create Sphere object
             sphere_name = f"{os.path.basename(self.image_path).split(' ')[-1][:-4]}_{i}.png"
-            sphere_obj = sphere.Sphere(sphere_image, sphere_name, (cx, cy), diameters[i])
+            sphere_obj = Sphere(sphere_image, sphere_name, (cx, cy), diameters[i])
             spheres.append(sphere_obj)
             
             # Create directory for saving sphere images if it doesn't exist

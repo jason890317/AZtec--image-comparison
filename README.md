@@ -35,7 +35,7 @@ AZtec--image-comparison/
 │   └── pole figure FCC/
 │   └── pole figure sigma direction/
 │   └── pole figure sigma plane/
-├── utils/                 # Core functionality
+├── service/               # Core functionality
 │   ├── image.py           # Image class for handling whole images
 │   └── sphere.py          # Sphere class for individual sphere analysis
 ├── .env                   # Environment variables for file paths and region settings
@@ -53,7 +53,7 @@ AZtec--image-comparison/
 
 2. Configure the `.env` file with your region and image paths:
    ```
-   REGION="region3"
+   REGION="regionX"
    
    BCC="asset/${REGION}/${REGION}_pole figure BCC.bmp"
    FCC="asset/${REGION}/${REGION}_pole figure FCC.bmp"

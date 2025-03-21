@@ -1,4 +1,4 @@
-from utils import image
+from service.image import Image 
 import os 
 import logging
 from dotenv import load_dotenv
@@ -13,14 +13,14 @@ if __name__ == "__main__":
     compared_image_paths=str(os.getenv("COMPARED_FILE")).split(",")
     
     # Load main image
-    main_image = image.Image(main_image_path)
+    main_image = Image(main_image_path)
     logging.info(f"Loading Main Image: {main_image_path}")
 
     # Load compared images
     compared_images = []
     for compared_image_path in compared_image_paths:
         logging.info(f"Loading compared image: {compared_image_path}")
-        compared_image = image.Image(compared_image_path)
+        compared_image = Image(compared_image_path)
         compared_images.append(compared_image)
     
     # Compare images
