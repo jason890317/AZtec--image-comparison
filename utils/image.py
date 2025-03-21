@@ -19,6 +19,8 @@ class Image:
         self.rows = 0
         self.cols = 0
         self.total_count = 0
+        self.centers = []
+        self.spheres = []
 
     def count_blue_sphere(self, debug=False):
         """
@@ -116,6 +118,7 @@ class Image:
         self.rows = rows
         self.cols = cols
         self.total_count = total_count
+        self.centers = centers
 
 
 
@@ -123,7 +126,7 @@ class Image:
 
 
     # Extract spheres using vectorized operations where possible
-    def extract_spheres_by_centers(self, centers, diameter):
+    def extract_spheres_by_centers(self, diameter):
         """Extract spheres from image based on center coordinates and diameter.
         
         Args:
@@ -137,11 +140,11 @@ class Image:
         
         # Handle both single diameter and list of diameters
         if isinstance(diameter, int):
-            diameters = [diameter] * len(centers)
+            diameters = [diameter] * len(self.centers)
         else:
             diameters = diameter
             
-        for (cx, cy), d in zip(centers, diameters):
+        for (cx, cy), d in zip(self.centers, diameters):
             # Calculate the bounding box
             radius = d // 2
             x_start = max(0, cx - radius)
@@ -156,5 +159,7 @@ class Image:
             sphere_obj = sphere.Sphere(sphere_image, (cx, cy), d)
             # Store diameter
             spheres.append(sphere_obj)
-        
+            cv2.imwrite(f"debug_image/sphere_{cx}_{cy}.png", sphere_image)
+        self.spheres = spheres
         return spheres
+ 
