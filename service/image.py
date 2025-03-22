@@ -26,7 +26,7 @@ class Image:
         self.count_blue_sphere()
         self.extract_spheres_by_centers(SPHERE_DIAMETER)
 
-    def count_blue_sphere(self, debug=False):
+    def count_blue_sphere(self, debug=True):
         """
         Count the number of blue balls in the image and determine rows and columns.
         
@@ -71,7 +71,15 @@ class Image:
             return 0, 0, 0
         
         # Sort centers by y-coordinate (row)
-        sorted_centers = sorted(centers.copy(), key=lambda item: (item[0], item[1]))
+        # Define custom sorting function that considers both x and y coordinates within 10 of each other as the same
+        def custom_sort_key(item):
+            # Round both coordinates to nearest 10 to group similar values
+            group_x = item[0] // 10 * 10
+            group_y = item[1] // 10 * 10
+            return (group_x, group_y)
+            
+        # Apply custom sorting directly
+        sorted_centers = sorted(centers.copy(), key=custom_sort_key)
 
         centers.sort(key=lambda p: p[1])
         
@@ -176,4 +184,3 @@ class Image:
         for sphere in self.spheres:
             for other_sphere in other_image.spheres:
                 sphere.compare_spheres(other_sphere)
-
