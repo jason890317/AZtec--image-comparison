@@ -167,7 +167,7 @@ class Image:
             
             # Create Sphere object
             sphere_name = f"{os.path.basename(self.image_path).split(' ')[-1][:-4]}_{i}.png"
-            sphere_obj = Sphere(sphere_image, sphere_name, (cx, cy), diameters[i])
+            sphere_obj = Sphere(sphere_image, sphere_name, (cx, cy), diameters[i],self.image_path)
             spheres.append(sphere_obj)
             
             # Create directory for saving sphere images if it doesn't exist

@@ -6,13 +6,14 @@ import os
 
 class Sphere:
 
-    def __init__(self, image, name,center, diameter):
+    def __init__(self, image, name,center, diameter,mother):
         self.image = image
         self.name = name
         self.green_mask = None
         self.green_only = None
         self.center = center
         self.diameter = diameter
+        self.mother= mother
         self._extract_green_point()
 
     def _extract_green_point(self):
@@ -80,7 +81,8 @@ class Sphere:
         
         # Save the composite visualization
         region=os.getenv("REGION")
-        saved_dir = os.path.join("overlapped",region)
+        sub_dir=os.path.basename(self.mother)[:-4]+"_"+os.path.basename(other_sphere.mother)[:-4]
+        saved_dir = os.path.join("overlapped",region,sub_dir)
         os.makedirs(saved_dir, exist_ok=True)
         cv2.imwrite(f"{saved_dir}/{self.name[:-4]}_{other_sphere.name[:-4]}_overlapped.png", composite)
 
